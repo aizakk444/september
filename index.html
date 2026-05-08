@@ -1,226 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOTES</title>
-  <style>
-    body {
-      font-family: 'Segoe Script', 'Brush Script MT', cursive;
-      background-color: #ffd6e8;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NOTES</title>
+
+<style>
+  body{
+    font-family:'Segoe Script','Brush Script MT',cursive;
+    background-color:#ffd6e8;
+    margin:0;
+    padding:20px;
+    display:flex;
+    justify-content:center;
+  }
+
+  .calendar-container{
+    background:white;
+    border-radius:25px;
+    padding:25px;
+    width:100%;
+    max-width:520px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
+  }
+
+  h1{
+    text-align:center;
+    color:black;
+    margin-bottom:20px;
+    font-size:28px;
+  }
+
+  .weekdays{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    text-align:center;
+    font-size:14px;
+    margin-bottom:10px;
+    color:#555;
+  }
+
+  .calendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:8px;
+  }
+
+  .day{
+    background:#ffe3f1;
+    padding:15px 0;
+    border-radius:10px;
+    text-align:center;
+    cursor:pointer;
+    transition:0.2s;
+    font-size:18px;
+    border:2px solid transparent;
+  }
+
+  .day:hover{
+    background:#ffbcd6;
+    border-color:#ff98c2;
+  }
+
+  /* Modal */
+  .modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    z-index:999;
+  }
+
+  .modal-content{
+    background:white;
+    padding:20px;
+    width:90%;
+    max-width:420px;
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+    animation:pop 0.25s ease;
+  }
+
+  @keyframes pop{
+    0%{ transform:scale(0.85); }
+    100%{ transform:scale(1); }
+  }
+
+  #modalTitle{
+    font-size:22px;
+    text-align:center;
+    margin-bottom:10px;
+  }
+
+  /* FIXED HERE */
+  #noteText{
+    font-size:18px;
+    white-space:pre-line;
+    line-height:1.5;
+    margin:10px 0;
+    word-break:break-word;
+    text-align:center;
+  }
+
+  .btn-row{
+    display:flex;
+    justify-content:center;
+    margin-top:15px;
+  }
+
+  button{
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    background:pink;
+    font-size:18px;
+    transition:0.2s;
+  }
+
+  button:hover{
+    background:#ff9ec5;
+  }
+
+  /* 📱 Mobile */
+  @media (max-width:500px){
+
+    body{
+      padding:10px;
     }
 
-    .calendar-container {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      width: 100%;
-      max-width: 520px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    h1{
+      font-size:24px;
     }
 
-    h1 {
-      text-align: center;
-      color: black;
-      margin-bottom: 20px;
-      font-size: 28px;
+    .day{
+      font-size:16px;
+      padding:12px 0;
     }
 
-    .weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      text-align: center;
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #555;
+    #noteText{
+      font-size:16px;
+      text-align:center;
     }
 
-    .calendar {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
+    .modal-content{
+      padding:18px;
     }
-
-    .day {
-      background: #ffe3f1;
-      padding: 15px 0;
-      border-radius: 10px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.2s;
-      font-size: 18px;
-      border: 2px solid transparent;
-      word-break: break-word;
-    }
-
-    .day:hover {
-      background: #ffbcd6;
-      border-color: #ff98c2;
-    }
-
-    /* Modal */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      z-index: 999;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 20px;
-      width: 90%;
-      max-width: 420px;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      animation: pop 0.25s ease;
-    }
-
-    @keyframes pop {
-      0% { transform: scale(0.85); }
-      100% { transform: scale(1); }
-    }
-
-    #modalTitle {
-      font-size: 22px;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    #noteText {
-      font-size: 18px;
-      white-space: pre-line;
-      line-height: 1.35;
-      margin: 10px 0;
-      word-break: break-word;
-    }
-
-    .btn-row {
-      display: flex;
-      justify-content: center;
-      margin-top: 15px;
-    }
-
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background: pink;
-      font-size: 18px;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      background: #ff9ec5;
-    }
-
-    /* 📱 Mobile Responsive Adjustments */
-    @media (max-width: 500px) {
-      h1 { font-size: 24px; }
-      .day { font-size: 16px; padding: 12px 0; }
-      #noteText { font-size: 16px; }
-    }
-  </style>
+  }
+</style>
 </head>
 
 <body>
-  <div class="calendar-container">
-    <h1>September Notes 2025</h1>
 
-    <div class="weekdays">
-      <div>Sun</div><div>Mon</div><div>Tue</div>
-      <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-    </div>
+<div class="calendar-container">
+  <h1>September Notes 2025</h1>
 
-    <div class="calendar" id="calendar"></div>
+  <div class="weekdays">
+    <div>Sun</div>
+    <div>Mon</div>
+    <div>Tue</div>
+    <div>Wed</div>
+    <div>Thu</div>
+    <div>Fri</div>
+    <div>Sat</div>
   </div>
 
-  <!-- Modal -->
-  <div class="modal" id="noteModal">
-    <div class="modal-content">
-      <h2 id="modalTitle"></h2>
-      <p id="noteText"></p>
+  <div class="calendar" id="calendar"></div>
+</div>
 
-      <div class="btn-row">
-        <button onclick="closeModal()">Close</button>
-      </div>
+<!-- Modal -->
+<div class="modal" id="noteModal">
+  <div class="modal-content">
+    <h2 id="modalTitle"></h2>
+    <p id="noteText"></p>
+
+    <div class="btn-row">
+      <button onclick="closeModal()">Close</button>
     </div>
   </div>
+</div>
 
-  <script>
-    const calendar = document.getElementById("calendar");
+<script>
+
+const calendar = document.getElementById("calendar");
 
 const messages = {
-  1: "unknown",
-  2: "unknown",
-  3: "unknown",
-  4: "unknown",
-  5: "unknown",
-  6: "unknown",
-  7: "unknown",
-  8: "unknown",
-  9: "unknown",
-  10: "unknown",
-  11: "unknown",
-  12: "unknown",
-  13: "unknown",
-  14: "unknown",
-  15: "unknown",
-  16: "unknown",
-  17: "unknown",
-  18: "unknown",
-  19: "unknown",
-  20: "unknown",
-  21: "unknown",
-  22: "unknown",
-  23: "unknown",
-  24: "unknown",
-  25: "unknown",
-  26: "unknown",
-  27: "unknown",
-  28: "unknown",
-  29: "unknown",
-  30: "unknown"
+  1:"unknown",
+  2:"unknown",
+  3:"unknown",
+  4:"unknown",
+  5:"unknown",
+  6:"unknown",
+  7:"unknown",
+  8:"unknown",
+  9:"unknown",
+  10:"unknown",
+  11:"unknown",
+  12:"unknown",
+  13:"unknown",
+  14:"unknown",
+  15:"unknown",
+  16:"unknown",
+  17:"unknown",
+  18:"unknown",
+  19:"unknown",
+  20:"unknown",
+  21:"unknown",
+  22:"unknown",
+  23:"unknown",
+  24:"unknown",
+  25:"unknown",
+  26:"unknown",
+  27:"unknown",
+  28:"unknown",
+  29:"unknown",
+  30:"unknown"
 };
 
+const emptyStartCells = 1;
 
+for(let i=0; i<emptyStartCells; i++){
+  calendar.appendChild(document.createElement("div"));
+}
 
-    const emptyStartCells = 1;
-    for (let i = 0; i < emptyStartCells; i++) {
-      calendar.appendChild(document.createElement("div"));
-    }
+for(let i=1; i<=30; i++){
 
-    for (let i = 1; i <= 30; i++) {
-      const day = document.createElement("div");
-      day.classList.add("day");
-      day.textContent = i;
-      day.onclick = () => openNote(i);
-      calendar.appendChild(day);
-    }
+  const day = document.createElement("div");
 
-    function openNote(day){
-      document.getElementById("modalTitle").textContent = `September ${day}`;
-      document.getElementById("noteText").textContent = messages[day] || "(No message)";
-      document.getElementById("noteModal").style.display = "flex";
-    }
+  day.classList.add("day");
 
-    function closeModal(){
-      document.getElementById("noteModal").style.display = "none";
-    }
-  </script>
+  day.textContent = i;
+
+  day.onclick = () => openNote(i);
+
+  calendar.appendChild(day);
+}
+
+function openNote(day){
+
+  document.getElementById("modalTitle").textContent = `September ${day}`;
+
+  document.getElementById("noteText").textContent =
+    messages[day] || "(No message)";
+
+  document.getElementById("noteModal").style.display = "flex";
+}
+
+function closeModal(){
+
+  document.getElementById("noteModal").style.display = "none";
+}
+
+</script>
+
 </body>
 </html>
